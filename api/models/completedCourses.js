@@ -13,15 +13,16 @@ var videoSchema = new Schema({
     description: [String]
 })
 
+var sectionSchema = new Schema({
+    title: {
+        type: String,
+        required: true
+    },
+    videos: [videoSchema]
+    
+})
+
 var courseSchema = new Schema({
-    userid:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'user'
-    },
-    courseid:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:'course'
-    },
     category_id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
@@ -44,8 +45,8 @@ var courseSchema = new Schema({
     time: {
         type: String,
         required: true
-    }
-
+    },
+    sections: [sectionSchema]
 }, {
     timestamps: true
 })
