@@ -101,3 +101,21 @@ exports.deleteSingleCategory = async (req, res) => {
         res.json(err)
     })
 }
+
+exports.getAllCoursesOfCategory = (req, res) => {
+    Courses.find({category_id: req.params.id})
+    .then((courses) => {
+        if(courses) {
+            res.setHeader('Content-Type', 'application/json');
+            res.statusCode = 200;
+            res.json(courses)
+        } else {
+            res.json({
+                msg: "Wasn't able to find any courses in this category"
+            })
+        }
+    })
+    .catch((err) => {
+        message: "Something went wrong"
+    })
+}

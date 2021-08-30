@@ -4,10 +4,10 @@ const Courses = require("../models/courses")
 exports.getAllVideos = (req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
-        if(course) {
+        if(course && course.sections.id(req.params.sectionId) != null) {
             res.statusCode = 200;
 			res.setHeader('Content-Type', 'application/json');
-			res.json(course.videos);
+			res.json(course.sections.id(req.params.sectionId).videos);
         } else {
             res.json({
                 msg: "wasnt able to find the given course"
@@ -21,10 +21,10 @@ exports.getAllVideos = (req, res) => {
 exports.getSingleVideo = (req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
-        if (course != null && course.videos.id(req.params.videoId) != null) {
+        if (course != null && course.sections.id(req.params.sectionId).videos.id(req.params.videoId) != null) {
 			res.statusCode = 200;
 			res.setHeader('Content-Type', 'application/json');
-			res.json(course.videos.id(req.params.videoId));
+			res.json(course.sections.id(req.params.sectionId).videos.id(req.params.videoId));
 		} else if(course == null){
             res.json({
                 msg: "wasnt able to find the given course"
@@ -45,7 +45,7 @@ exports.createVideo = (req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
         if(course) {
-            course.videos.push({
+            course.sections.id(req.params.sectionId).videos.push({
                 title: req.body.title,
                 videoLink: req.body.videoLink,
                 description: req.body.description
@@ -76,15 +76,15 @@ exports.createVideo = (req, res) => {
 exports.updateVideo = (req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
-        if(course && course.videos.id(req.params.videoId)) {
+        if(course && course.sections.id(req.params.sectionId).videos.id(req.params.videoId) != null) {
             if(req.body.title) {
-                course.videos.id(req.params.videoId).title = req.body.title
+                course.sections.id(req.params.sectionId).videos.id(req.params.videoId).title = req.body.title
             }
             if(req.body.videoLink) {
-                course.videos.id(req.params.videoId).videoLink = req.body.videoLink
+                course.sections.id(req.params.sectionId).videos.id(req.params.videoId).videoLink = req.body.videoLink
             }
             if(req.body.description){
-                course.videos.id(req.params.videoId).videoLink = req.body.description
+                course.sections.id(req.params.sectionId).videos.id(req.params.videoId).description = req.body.description
             }
             course.save()
             .then((course) => {
@@ -117,8 +117,8 @@ exports.deleteAllVideo =(req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
         if(course) {
-            for(var i = (course.videos.length -1); i>=0; i--) {
-				course.videos.id(course.videos[i]._id).remove();
+            for(var i = (course.sections.id(req.params.sectionId).videos.length -1); i>=0; i--) {
+				course.sections.id(req.params.sectionId).videos.id(course.sections.id(req.params.sectionId).videos[i]._id).remove();
 			}
             course.save()
 			.then((course) => {
@@ -143,8 +143,8 @@ exports.deleteAllVideo =(req, res) => {
 exports.deleteSingleVideo =(req, res) => {
     Courses.findById(req.params.courseId)
     .then((course) => {
-        if(course && course.videos.id(req.params.videoId)) {
-            course.videos.id(req.params.videoId).remove()
+        if(course && course.sections.id(req.params.sectionId).videos.id(req.params.videoId)) {
+            course.sections.id(req.params.sectionId).videos.id(req.params.videoId).remove()
             course.save()
             .then((course) => {
                 Courses.findById(req.params.courseId)

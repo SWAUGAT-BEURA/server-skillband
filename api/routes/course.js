@@ -3,6 +3,7 @@ const courseRouter = require("express").Router();
 // Import Controllers
 const courseController = require('../controllers/courseController')
 const videoController = require("../controllers/videoController")
+const sectionController = require("../controllers/sectionController")
 
 
 courseRouter.route('/')
@@ -24,8 +25,26 @@ courseRouter.route('/:courseId')
 .put(courseController.updateCourse)
 .delete(courseController.deleteSingleCourse)
 
+courseRouter.route('/:courseId/sections')
+.get(sectionController.getAllSection)
+.post(sectionController.createSection)
+.put((req, res) => {
+    res.statusCode = 403;
+	res.end('PUT operation not supported');
+})
+.delete(sectionController.deleteAllSections)
 
-courseRouter.route('/:courseId/videos')
+courseRouter.route('/:courseId/sections/:sectionId')
+.get(sectionController.getSingleSection)
+.post((req, res) => {
+    res.statusCode = 403;
+	res.end('POST operation not supported');
+})
+.put(sectionController.updateSection)
+.delete(sectionController.deleteSingleSection)
+
+
+courseRouter.route('/:courseId/sections/:sectionId/videos')
 .get(videoController.getAllVideos)
 .post(videoController.createVideo)
 .put((req, res) => {
@@ -35,7 +54,7 @@ courseRouter.route('/:courseId/videos')
 .delete(videoController.deleteAllVideo)
 
 
-courseRouter.route('/:courseId/videos/:videoId')
+courseRouter.route('/:courseId/sections/:sectionId/videos/:videoId')
 .get(videoController.getSingleVideo)
 .post((req, res) => {
     res.statusCode = 403;

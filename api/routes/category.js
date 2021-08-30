@@ -19,4 +19,7 @@ categoryRouter.route('/:id')
 .put(categoryController.updateCategory)
 .delete(categoryController.deleteSingleCategory)
 
+categoryRouter.route('/:id/courses')
+.get(categoryController.getAllCoursesOfCategory)
+
 module.exports = categoryRouter;
