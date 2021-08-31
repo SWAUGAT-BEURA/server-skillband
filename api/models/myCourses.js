@@ -25,11 +25,13 @@ var sectionSchema = new Schema({
 var courseSchema = new Schema({
     userid:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'user'
+        ref:'user',
+        reuired:true
     },
     courseid:{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'course'
+        ref:'course',
+        reuired:true
     },
     category_id: {
         type: mongoose.Schema.Types.ObjectId,
@@ -40,19 +42,16 @@ var courseSchema = new Schema({
         required: true
     },
     description: {
-        type: String,
-        required: true
+        type: String
     },
     thumbnail: {
         type: String
     },
     difficulty: {
-        type: String,
-        required: true
+        type: String
     },
     time: {
-        type: String,
-        required: true
+        type: String
     },
     sections: [sectionSchema]
 

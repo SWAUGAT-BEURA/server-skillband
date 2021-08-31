@@ -9,6 +9,7 @@ const categoryRouter = require("./routes/category")
 const courseRouter = require("./routes/course")
 const googleRouter = require("./routes/google")
 const dashboardRoutes=require('./routes/userDashboardRouter');
+const homeRouter=require('./routes/home');
 
 const bodyParser = require('body-parser')
 const cors=require('cors');
@@ -23,7 +24,8 @@ app.use(bodyParser.json())
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }))
 dbConn();
- 
+
+app.use('/api/home',homeRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use('/api/category', categoryRouter);

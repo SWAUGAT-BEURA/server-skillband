@@ -3,11 +3,21 @@ const router=express.Router();
 const dashboardController=require('../controllers/dashboardControllers');
 
 //my course section
-router.get("/mylearnings/:id",dashboardController.mylearnings)
+router.get("/mylearnings/:userid",dashboardController.mylearnings)
 
-router.get("/myCompletedCourses/:id",dashboardController.myCompletedCourses)
+router.get("/myCompletedCourses/:userid",dashboardController.myCompletedCourses)
 
 router.post('/addmycourse/:id',dashboardController.addmycourse)
+
+router.delete('/unEnrollCourse/:id',dashboardController.unEnrollCourse)
+
+//my favourites section
+
+router.post('/addToFavourites/:id',dashboardController.addtofavourites)
+
+router.get('/getMyFavourites/:userid',dashboardController.getMyfavourites)
+
+router.delete('/removeFavourites/:id',dashboardController.removeFavourites)
 
 
 //my notes section

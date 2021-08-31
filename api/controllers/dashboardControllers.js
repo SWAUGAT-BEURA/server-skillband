@@ -1,19 +1,25 @@
 const courseModel=require('../models/myCourses');
 const completedCourseModel=require('../models/completedCourses');
 const notesModel=require('../models/notes');
+const myFavCourses=require('../models/myFavCourses');
 
 
 //api's for user courses section
 exports.mylearnings=async(req,res)=>{
     try{
         let courses=await courseModel.find({userid:req.params.userid}).populate('userid');
-        if(!courses){
-            courses=[]
+        if(!courses){  
+            res.status(200).json({
+                message:"No courses found",
+                courses=[]
+            })  
+        }else{
+            res.status(200).json({
+                message:"courses fetched successfully",
+                coursesData:courses
+            })
         }
-        res.status(200).json({
-            message:"courses fetched successfully",
-            coursesData:courses
-        })
+        
     }catch(err){
         res.status(500).json({
             message:"something went wrong",
@@ -22,7 +28,6 @@ exports.mylearnings=async(req,res)=>{
 
     }    
 }
-
 
 exports.myCompletedCourses=async(req,res)=>{
     try{
@@ -47,12 +52,9 @@ exports.myCompletedCourses=async(req,res)=>{
 exports.addmycourse=async(req,res)=>{
     const course={
         userid:req.body.userid,
+        courseid:req.body.courseid,
         category_id:req.body.category_id,        
-        name:req.body.name,
-        description:req.body.description,
-        thumbnail:req.body.thumbnail,
-        difficulty:req.body.difficulty,
-        time:req.body.time
+        name:req.body.name
     } 
       
     try{        
@@ -72,9 +74,102 @@ exports.addmycourse=async(req,res)=>{
     }
 }
 
+exports.unEnrollCourse=async(req,res)=>{
+    const id=req.params.id;
+    try{
+        const unenrollcourse=await courseModel.findByIdAndDelete(id);
+        if(unenrollcourse==null){
+            res.status(400).json({
+            message:"Course couldn't be deleted or not found"
+        })
+        }else{
+            res.status(200).json({
+            message:"Course deleted sucessfully",
+        })
+    }    
+    }catch{
+        res.status(500).json({
+            message:"something went wrong",
+            error:err
+        })
+    }
+}
+
+
+//favourites section
+exports.getMyfavourites=async(req,res)=>{
+    try{
+        let favCourses= await myFavCourses.find({userid:req.params.userid}).populate('userid');
+        if (!favCourses){
+            res.status(200).json({
+                message:"No courses found",
+                courses=[]
+            })  
+        }else{
+            res.status(200).json({
+                message:"courses fetched successfully",
+                coursesData:courses
+            })
+        }
+    }catch(err){
+        res.status(500).json({
+            message:"something went wrong",
+            error:err
+        })
+    }
+}
+
+exports.addtofavourites=async(req,res)=>{
+    const course={
+        userid:req.body.userid,
+        courseid:req.body.courseid,
+        category_id:req.body.category_id,        
+        name:req.body.name
+    } 
+      
+    try{        
+        const course1=new myFavCourses(course);
+        await course1.save()
+        res.status(200).json({
+        message:"course added to favourites",
+        courseData:course1
+    })
+
+    }catch(err){
+        res.status(500).json({
+            message:"something went wrong",
+            error: err
+        })
+        
+    }
+}
+
+exports.removeFavourites=async(req,res)=>{
+    const id=req.params.id;
+    try{
+        const deletefav=await myFavCourses.findByIdAndDelete(id);
+        if(deletefav==null){
+            res.status(400).json({
+            message:"Course couldn't be deleted or not found"
+        })
+        }else{
+            res.status(200).json({
+            message:"Course deleted sucessfully",
+        })
+        }    
+    }catch{
+        res.status(500).json({
+            message:"something went wrong",
+            error:err
+        })
+    }
+}
+
+
+
+
 //api for notes section
-exports.getMyNotes=async(req,res)=>{
-    
+exports.getMyNotes=async(req,res)=>{    
     notesModel.find({userid: req.params.userid})
     .then((notes) => {
         console.log(notes);
@@ -150,11 +245,11 @@ exports.deleteNotes=async(req,res)=>{
         const deleteNote=await notesModel.findByIdAndDelete(id);
         if(deleteNote==null){
             res.status(400).json({
-            message:"Contact couldnt be deleted or id not found"
+            message:"Note couldnt be deleted or  not found"
         })
         }else{
             res.status(200).json({
-            message:"contact deleted sucessfully",
+            message:"Note deleted sucessfully",
         })
         }    
     }catch{
