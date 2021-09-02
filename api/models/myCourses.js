@@ -55,10 +55,18 @@ var courseSchema = new Schema({
     },
     sections: [sectionSchema]
 
-}, {
-    timestamps: true
 })
 
-var myCourses = mongoose.model('myLearnings',courseSchema);
+var mycourseSchema=new Schema({
+    userid:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
+    mycoursedata:courseSchema
+
+})
+
+var myCourses = mongoose.model('myLearnings',mycourseSchema);
 
 module.exports =  myCourses;

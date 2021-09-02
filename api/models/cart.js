@@ -15,6 +15,7 @@ var cartSchema = new Schema({
     timestamps: true
 })
 
-var myNotes = mongoose.model('freeUser',cartSchema);
+var myCart = mongoose.model('cart',cartSchema);
 
-module.exports =  myNotes;
+module.exports = myCart ;
+;

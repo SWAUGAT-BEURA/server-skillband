@@ -28,14 +28,14 @@ var courseSchema = new Schema({
         ref:'user',
         reuired:true
     },
-    category_id: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category'
-    },
     courseid:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'course',
         reuired:true
+    },
+    category_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category'
     },
     name: {
         type: String,
@@ -54,10 +54,20 @@ var courseSchema = new Schema({
         type: String
     },
     sections: [sectionSchema]
-}, {
-    timestamps: true
+
 })
 
-var myCourses = mongoose.model('completedCourses',courseSchema);
+var completedCourseSchema=new Schema({
+    userid:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
+    completedcourses: courseSchema
+
+})
+
+
+var myCourses = mongoose.model('completedCourses',completedCourseSchema);
 
 module.exports =  myCourses;

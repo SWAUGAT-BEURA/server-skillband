@@ -19,6 +19,6 @@ var freeCallSchema = new Schema({
     timestamps: true
 })
 
-var myNotes = mongoose.model('freeUser',freeCallSchema);
+var freeUser = mongoose.model('freeUser',freeCallSchema);
 
-module.exports =  myNotes;
+module.exports =  freeUser;

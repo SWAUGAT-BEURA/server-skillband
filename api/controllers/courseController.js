@@ -44,7 +44,7 @@ exports.createCourse = (req, res) => {
     .then((category) => {
         if(!category) {
             res.json({
-                msg: "There is no category with " + req.body.category_id + " this id"
+                message: "There is no category with " + req.body.category_id + " this id"
             })
         } else {
             Courses.create({

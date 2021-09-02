@@ -55,10 +55,18 @@ var courseSchema = new Schema({
     },
     sections: [sectionSchema]
 
-}, {
-    timestamps: true
 })
 
-var myCourses = mongoose.model('myFavCourses',courseSchema);
+var favCourseSchema=new Schema({
+    userid:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'User',
+        required:true
+    },
+    favcourses: courseSchema
+
+})
+
+var myCourses = mongoose.model('myFavCourses',favCourseSchema);
 
 module.exports =  myCourses;
